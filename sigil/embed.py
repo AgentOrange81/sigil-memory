@@ -171,9 +171,13 @@ def hybrid_search(db, query: str, url: str, model: str, limit: int = 10,
             if row is None:
                 continue
             by_id[eid] = dict(index_mod.row_to_entry(row).__dict__, id=eid, snip="")
+        superseded_by = index_mod.superseded_by_map(c)
     finally:
         c.close()
     rows = [by_id[eid] for eid in order[:limit] if eid in by_id]
+    # the fusion is a ranking, and a superseded entry is not the current answer: re-apply the
+    # demotion the lexical path applies, or the hybrid path would rank a corrected claim first
+    rows = index_mod.demote_superseded(rows, superseded_by)
     return rows, ""
 
 

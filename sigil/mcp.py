@@ -48,7 +48,13 @@ def _search(cfg, args: dict) -> dict:
         return {"query": args.get("query"), "hits": [], "note": "no matches"}
     keys: tuple[str, ...] = ("id", "kind", "state", "agent", "project", "created", "summary", "ask",
                              "snip", "score")
-    return {"query": args.get("query"), "hits": [{k: r.get(k) for k in keys if k in r} for r in rows]}
+    hits = []
+    for r in rows:
+        hit = {k: r.get(k) for k in keys if k in r}
+        if r.get("superseded_by"):
+            hit["superseded_by"] = r["superseded_by"]
+        hits.append(hit)
+    return {"query": args.get("query"), "hits": hits}
 
 
 def _timeline(cfg, args: dict) -> dict:

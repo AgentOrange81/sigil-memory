@@ -1,6 +1,7 @@
 """SQLite index: full-text search over entries plus the temporal graph tables."""
 from __future__ import annotations
 
+import json
 import re
 import sqlite3
 from datetime import datetime, timedelta, timezone
@@ -11,7 +12,12 @@ from .store import Entry, iter_entries
 #: The schema version of this db, carried in `PRAGMA user_version`. A db written by an older
 #: sigil has a lower number. The index is derived from the markdown, so an old db is a rebuild
 #: away from being current - never a vault that cannot be opened (#23).
-SCHEMA_VERSION = 2
+#:
+#: v3 adds `entries.supersedes`: the ids an entry corrects, copied from the note frontmatter at
+#: reindex. It is what lets retrieval rank a corrected claim below its correction. A db written
+#: before v3 is a DERIVED index with a column missing, so it is rebuilt from the markdown, which is
+#: the truth anyway.
+SCHEMA_VERSION = 3
 
 #: TABLES FIRST, and no index in here: an index on a column that the migration has not added yet
 #: is the crash that made every command die on a vault written before the identity key.
@@ -21,7 +27,7 @@ PRAGMA journal_mode=WAL;
 CREATE TABLE IF NOT EXISTS entries(
   id TEXT PRIMARY KEY, path TEXT NOT NULL, kind TEXT, state TEXT, agent TEXT, project TEXT,
   session TEXT, created TEXT, confidence REAL, importance REAL, ask TEXT, summary TEXT,
-  evidence TEXT, body TEXT, model TEXT, evidence_kind TEXT);
+  evidence TEXT, body TEXT, model TEXT, evidence_kind TEXT, supersedes TEXT);
 
 CREATE VIRTUAL TABLE IF NOT EXISTS entries_fts USING fts5(
   summary, ask, evidence, body, content='entries', content_rowid='rowid',
@@ -70,6 +76,10 @@ def _migrate(c: sqlite3.Connection) -> None:
         c.execute("ALTER TABLE entries ADD COLUMN model TEXT")
     if "evidence_kind" not in entry_cols:
         c.execute("ALTER TABLE entries ADD COLUMN evidence_kind TEXT")
+    # v3: the ids an entry corrects. Nullable, so a row from before the column simply has none —
+    # which is the truth until the index is rebuilt from the markdown.
+    if "supersedes" not in entry_cols:
+        c.execute("ALTER TABLE entries ADD COLUMN supersedes TEXT")
     from .graph import identity  # local import: graph imports index, so a top-level one cycles
     for row in c.execute("SELECT id, name FROM entities WHERE key IS NULL OR key = ''").fetchall():
         c.execute("UPDATE entities SET key = ? WHERE id = ?", (identity(row["name"]), row["id"]))
@@ -141,11 +151,11 @@ def reindex(root: str | Path, db: str | Path) -> int:
         for path, e in rows:
             c.execute(
                 "INSERT OR REPLACE INTO entries(id,path,kind,state,agent,project,session,created,"
-                "confidence,importance,ask,summary,evidence,body,model,evidence_kind) "
-                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                "confidence,importance,ask,summary,evidence,body,model,evidence_kind,supersedes) "
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (e.id, str(Path(path).relative_to(Path(root))), e.kind, e.state, e.agent, e.project,
                  e.session, e.created, e.confidence, e.importance, e.ask, e.summary, e.evidence, e.body,
-                 e.model, e.evidence_kind),
+                 e.model, e.evidence_kind, json.dumps(e.supersedes) if e.supersedes else ""),
             )
         c.execute("INSERT INTO entries_fts(rowid, summary, ask, evidence, body) "
                   "SELECT rowid, summary, ask, evidence, body FROM entries")
@@ -235,6 +245,40 @@ def time_bound(value: str, *, upper: bool) -> tuple[str, str]:
     return ("<" if upper else ">="), instant
 
 
+def superseded_by_map(c: sqlite3.Connection) -> dict[str, str]:
+    """{the id of a superseded entry: the id of the entry that supersedes it}.
+
+    An entry names the entries it corrects in its `supersedes` frontmatter, and the index copies
+    that list at reindex — the markdown is the truth, the db is derived. A correction that does not
+    itself match the query still demotes the claim it corrects: the claim is history either way.
+    """
+    out: dict[str, str] = {}
+    for row in c.execute("SELECT id, supersedes FROM entries "
+                         "WHERE supersedes IS NOT NULL AND supersedes != ''"):
+        try:
+            targets = json.loads(row["supersedes"])
+        except (TypeError, ValueError):
+            continue
+        if isinstance(targets, str):
+            targets = [targets]
+        for target in targets:
+            out[str(target)] = row["id"]
+    return out
+
+
+def demote_superseded(rows: list[dict], superseded_by: dict[str, str]) -> list[dict]:
+    """Rank a superseded entry below every entry that is not superseded. In place.
+
+    A correction is not a better MATCH, it is a more current one, so the score order inside each
+    group is left exactly as it was — only the group changes. Nothing is dropped: a superseded
+    entry is history the caller may still want, and hiding it is what pruning is for.
+    """
+    for row in rows:
+        row["superseded_by"] = superseded_by.get(row["id"])
+    rows.sort(key=lambda r: 1 if r.get("superseded_by") else 0)
+    return rows
+
+
 def search(db: str | Path, query: str, kind: str | None = None, state: str | None = None,
            agent: str | None = None, project: str | None = None, limit: int = 10,
            since: str | None = None, until: str | None = None,
@@ -247,6 +291,13 @@ def search(db: str | Path, query: str, kind: str | None = None, state: str | Non
     existed such an entry came back at rank 1 for a query that matched its own words, which taught
     agents to distrust recall. The graph and the exports keep reading pruned entries: pruning is about
     what retrieval offers, not about what history is allowed to remember.
+
+    A superseded entry is not dropped, it is ranked below the entries that are current: every row
+    carries `superseded_by` (the id of the entry that corrects it, or None), and a superseded row
+    sorts after every row that is not superseded, with the score order inside each group untouched.
+    Before this, a claim that had been corrected ranked right beside its correction — the measured
+    symptom was a query for the current PyPI publisher state returning the two entries that
+    described the OLD one at ranks 2 and 3.
 
     Every token is ANDed, which is precise and, for a question-shaped query, nearly empty: one word
     ("why", "did") in no note at all used to produce nothing, and the OR fallback that fixed that
@@ -280,9 +331,11 @@ def search(db: str | Path, query: str, kind: str | None = None, state: str | Non
         if loose and loose != match and len(rows) < limit:
             seen = {r["id"] for r in rows}
             rows += [r for r in _scan(c, loose, where, params, window) if r["id"] not in seen]
+        superseded_by = superseded_by_map(c)
     finally:
         c.close()
     rows.sort(key=lambda r: r["score"])
+    rows = demote_superseded(rows, superseded_by)
     return rows[:limit]
 
 

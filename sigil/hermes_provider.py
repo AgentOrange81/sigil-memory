@@ -391,8 +391,13 @@ class SigilMemoryProvider(MemoryProvider):
             limit = self._limit
         rows = index_mod.search(_db_path(self._vault), query, limit=limit,
                                 include_pruned=bool(args.get("include_pruned")))
-        results = [{"id": r.get("id"), "summary": r.get("summary"), "state": r.get("state"),
-                    "score": r.get("score", 0.0)} for r in rows]
+        results = []
+        for r in rows:
+            item = {"id": r.get("id"), "summary": r.get("summary"), "state": r.get("state"),
+                    "score": r.get("score", 0.0)}
+            if r.get("superseded_by"):
+                item["superseded_by"] = r["superseded_by"]
+            results.append(item)
         return json.dumps({"results": results})
 
     def _tool_write(self, args: dict[str, Any]) -> str:
