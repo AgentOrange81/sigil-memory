@@ -40,7 +40,8 @@ def _search(cfg, args: dict) -> dict:
             cfg.db_path, str(args.get("query") or ""), kind=args.get("kind") or None,
             state=args.get("state") or None, agent=args.get("agent") or None,
             project=args.get("project") or None, limit=int(args.get("limit") or 10),
-            since=args.get("since") or None, until=args.get("until") or None)
+            since=args.get("since") or None, until=args.get("until") or None,
+            include_pruned=bool(args.get("include_pruned")))
     except ValueError as exc:  # a bad window is a caller error, never a silently ignored filter
         return {"query": args.get("query"), "hits": [], "error": f"since/until: {exc}"}
     if not rows:                      # the CLI exits 1 on "no matches"; here that is a normal result
@@ -128,6 +129,9 @@ TOOLS: list[dict[str, Any]] = [
                 "limit": {"type": "integer", "default": 10},
                 "kind": {"type": "string", "description": "decision|fact|conclusion|capture|handoff|..."},
                 "state": {"type": "string", "description": "raw|promoted|pruned"},
+                "include_pruned": {"type": "boolean", "default": False,
+                                   "description": "also return pruned entries (no recall value; "
+                                                  "excluded unless asked)"},
                 "agent": {"type": "string"},
                 "project": {"type": "string"},
                 "since": {"type": "string",

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.10.1 — 2026-11-12
+
+**`search` no longer offers pruned entries.** `state: pruned` is the vault's judgement that an entry
+has no recall or training value — a session status paste, a duplicated handoff, a transcript dump
+promoted to a note — but until now pruning changed the exports and the graph and nothing else:
+`index.search()` filtered on state only when the caller passed one. A pruned entry therefore came back
+at rank 1 for a query that matched its own words (measured on the live vault: four "here's where things
+stand" notes, pruned, ranked 1-3 for their own text), and the Hermes provider injected that text into
+the prompt.
+
+`pruned` is now excluded from `index.search()`, the CLI `search`, the MCP `search` tool and the
+provider's recall by default. New escapes, in order of precision: `search --state pruned` (only those),
+`search --all-states` (everything), and `include_pruned: true` on both tool surfaces. The graph and the
+exports are unchanged — they must keep reading pruned entries, because pruning is about retrieval, not
+about what history is allowed to remember.
+
 ## 0.10.0 — 2026-11-11
 
 **Breaking: the `quipu` alias is retired.** The old name had one release of grace and it is spent. The

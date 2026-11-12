@@ -281,7 +281,7 @@ def cmd_search(args) -> int:
                 cfg.db_path, args.query, args.embed_url or cfg.embed_url,
                 args.embed_model or cfg.embed_model, limit=args.limit, kind=args.kind,
                 state=args.state, agent=args.agent, project=args.project,
-                since=args.since, until=args.until)
+                since=args.since, until=args.until, include_pruned=args.all_states)
         except ValueError as exc:
             print(f"--since/--until: {exc}", file=sys.stderr)
             return 2
@@ -291,7 +291,8 @@ def cmd_search(args) -> int:
         try:
             rows = index_mod.search(cfg.db_path, args.query, kind=args.kind, state=args.state,
                                     agent=args.agent, project=args.project, limit=args.limit,
-                                    since=args.since, until=args.until)
+                                    since=args.since, until=args.until,
+                                    include_pruned=args.all_states)
         except ValueError as exc:
             print(f"--since/--until: {exc}", file=sys.stderr)
             return 2
@@ -874,6 +875,8 @@ def build_parser() -> argparse.ArgumentParser:
                    help="only entries created through this DAY, or before an exact instant")
     s.add_argument("--hybrid", action="store_true",
                    help="fuse the lexical ranking with stored embeddings (#5)")
+    s.add_argument("--all-states", action="store_true",
+                   help="include pruned entries (excluded by default: pruning means no recall value)")
     s.add_argument("--embed-url", default="", help="override [embed] url")
     s.add_argument("--embed-model", default="", help="override [embed] model")
 
