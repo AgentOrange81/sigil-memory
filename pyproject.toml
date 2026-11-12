@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sigil-memory"
-version = "0.10.1"
+version = "0.10.2"
 description = "Local-first agent memory: verbatim capture, a temporal knowledge graph, and lifecycle-labeled training data."
 readme = "README.md"
 requires-python = ">=3.10"

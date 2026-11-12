@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.10.2 — 2026-11-12
+
+**Retrieval knows which claims were superseded.** `supersedes` was a frontmatter field that closed the
+old entry's graph edge windows and built preference pairs, and retrieval ignored it — so a claim that had
+been explicitly corrected still ranked beside its correction, and an agent quoting the top hit could
+quote the stale one.
+
+`index.search()` now builds a superseded map at reindex time (schema v3: an existing index rebuilds
+itself from the markdown on first use), annotates every hit with `superseded_by` — the id of the entry
+that corrected it — and ranks superseded rows below every current row, preserving score order inside
+each group. Nothing is dropped: a superseded entry is history, and it still appears when the caller asks
+for enough results or filters `--state pruned`. The CLI marks such a hit with `(superseded by <id>)`, the
+JSON output carries the field, and the MCP and provider search payloads include it.
+
+The hybrid/semantic path re-applies the demotion after RRF fusion, which the lexical fix alone would
+have missed.
+
+Honest limitation, measured on the live vault: the demotion is absolute, so a superseded entry falls
+below every current match rather than one band below. On a broad query it lands at the tail of a
+100+ row result and is effectively invisible — which is the intent for a corrected claim, but it means
+the annotation is rarely seen in a default five-hit answer. To remove a stale claim from recall
+entirely, prune it as well (0.10.1's filter); supersede to record that it was replaced, prune to stop
+offering it.
+
 ## 0.10.1 — 2026-11-12
 
 **`search` no longer offers pruned entries.** `state: pruned` is the vault's judgement that an entry
