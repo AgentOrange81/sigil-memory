@@ -1,0 +1,682 @@
+{
+  "dataset": {
+    "name": "synthetic",
+    "version": "v1",
+    "size": 200,
+    "queries": 100,
+    "notes": "200 generated notes in 25 clusters of eight; 100 queries, four kinds per cluster."
+  },
+  "run": {
+    "date": "2026-10-28",
+    "python": "3.12.13",
+    "retriever": "quipu.index.search (sqlite FTS5, bm25, unicode61+porter)",
+    "git_rev": "77b5dd36b480333442cc9c51f6b3c83ef19e116a",
+    "git_dirty": true
+  },
+  "k": [
+    5,
+    10
+  ],
+  "query_set_sha256": "621e629d35d1ab8c74db46e529949b3325d3addd5c56af7bc5f56ee0ac7d662c",
+  "corpus_sha256": "c522259a688bcd41e6bdbe80f2cc761ba796ff33e4e62c0b1c7b70542f72b2fe",
+  "metrics": {
+    "mrr": 0.2422,
+    "queries": 100,
+    "recall_at_5": 0.51,
+    "recall_at_10": 0.62,
+    "per_kind": {
+      "paraphrase": {
+        "queries": 25,
+        "recall_at_5": 0.4,
+        "recall_at_10": 0.48,
+        "mrr": 0.2433
+      },
+      "phrase": {
+        "queries": 25,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.4267
+      },
+      "question": {
+        "queries": 25,
+        "recall_at_5": 0.0,
+        "recall_at_10": 0.0,
+        "mrr": 0.0
+      },
+      "rare": {
+        "queries": 25,
+        "recall_at_5": 0.64,
+        "recall_at_10": 1.0,
+        "mrr": 0.2987
+      }
+    }
+  },
+  "misses": [
+    {
+      "qid": "q00-question",
+      "kind": "question",
+      "query": "why did we choose postgres for atlas",
+      "gold": [
+        "syn0000"
+      ],
+      "gold_summary": "Decision: kestrel write path for the checkout service in atlas (a.k.a. the purchase pipeline)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q01-paraphrase",
+      "kind": "paraphrase",
+      "query": "login cache in-memory cache",
+      "gold": [
+        "syn0101"
+      ],
+      "gold_summary": "Conclusion: anvil queue depth for the session store in bramble",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn0100",
+          "summary": "Lesson: anvil lock contention for the session store in bramble (a.k.a. the login cache)"
+        },
+        {
+          "rank": 2,
+          "id": "syn0106",
+          "summary": "Lesson: anvil lock contention for the session store in bramble (a.k.a. the login cache)"
+        },
+        {
+          "rank": 3,
+          "id": "syn0103",
+          "summary": "Handoff: anvil queue depth for the session store in bramble (a.k.a. the login cache)"
+        }
+      ]
+    },
+    {
+      "qid": "q01-question",
+      "kind": "question",
+      "query": "why did we choose redis for bramble",
+      "gold": [
+        "syn0101"
+      ],
+      "gold_summary": "Conclusion: anvil queue depth for the session store in bramble",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q02-paraphrase",
+      "kind": "paraphrase",
+      "query": "stream bus event bus",
+      "gold": [
+        "syn0202"
+      ],
+      "gold_summary": "Handoff: basalt schema drift for the ingest pipeline in cirrus",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn0200",
+          "summary": "Conclusion: basalt schema drift for the ingest pipeline in cirrus (a.k.a. the stream bus)"
+        },
+        {
+          "rank": 2,
+          "id": "syn0203",
+          "summary": "Capture: basalt index bloat for the ingest pipeline in cirrus (a.k.a. the stream bus)"
+        },
+        {
+          "rank": 3,
+          "id": "syn0206",
+          "summary": "Conclusion: basalt schema drift for the ingest pipeline in cirrus (a.k.a. the stream bus)"
+        }
+      ]
+    },
+    {
+      "qid": "q02-question",
+      "kind": "question",
+      "query": "why did we choose kafka for cirrus",
+      "gold": [
+        "syn0202"
+      ],
+      "gold_summary": "Handoff: basalt schema drift for the ingest pipeline in cirrus",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q03-question",
+      "kind": "question",
+      "query": "why did we choose docker for domino",
+      "gold": [
+        "syn0303"
+      ],
+      "gold_summary": "Decision: cobalt cache stampede for the build pipeline in domino (a.k.a. the image build)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q04-paraphrase",
+      "kind": "paraphrase",
+      "query": "k8s rollout cluster scheduler",
+      "gold": [
+        "syn0404"
+      ],
+      "gold_summary": "Conclusion: driftwood fanout width for the staging cluster in elmwood",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn0406",
+          "summary": "Handoff: driftwood fanout width for the staging cluster in elmwood (a.k.a. the k8s rollout)"
+        },
+        {
+          "rank": 2,
+          "id": "syn0400",
+          "summary": "Handoff: driftwood fanout width for the staging cluster in elmwood (a.k.a. the k8s rollout)"
+        },
+        {
+          "rank": 3,
+          "id": "syn0403",
+          "summary": "Lesson: driftwood lease renewal for the staging cluster in elmwood (a.k.a. the k8s rollout)"
+        }
+      ]
+    },
+    {
+      "qid": "q04-question",
+      "kind": "question",
+      "query": "why did we choose kubernetes for elmwood",
+      "gold": [
+        "syn0404"
+      ],
+      "gold_summary": "Conclusion: driftwood fanout width for the staging cluster in elmwood",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q05-paraphrase",
+      "kind": "paraphrase",
+      "query": "infra rollout infra as code",
+      "gold": [
+        "syn0505"
+      ],
+      "gold_summary": "Handoff: ember cold start for the cloud estate in fjord",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn0500",
+          "summary": "Capture: ember write path for the cloud estate in fjord (a.k.a. the infra rollout)"
+        },
+        {
+          "rank": 2,
+          "id": "syn0506",
+          "summary": "Capture: ember write path for the cloud estate in fjord (a.k.a. the infra rollout)"
+        },
+        {
+          "rank": 3,
+          "id": "syn0503",
+          "summary": "Conclusion: ember cold start for the cloud estate in fjord (a.k.a. the infra rollout)"
+        }
+      ]
+    },
+    {
+      "qid": "q05-question",
+      "kind": "question",
+      "query": "why did we choose terraform for fjord",
+      "gold": [
+        "syn0505"
+      ],
+      "gold_summary": "Handoff: ember cold start for the cloud estate in fjord",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q06-question",
+      "kind": "question",
+      "query": "why did we choose next.js for gantry",
+      "gold": [
+        "syn0606"
+      ],
+      "gold_summary": "Decision: falcon lock contention for the web app in gantry (a.k.a. the ui server)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q07-paraphrase",
+      "kind": "paraphrase",
+      "query": "object mapper data mapper",
+      "gold": [
+        "syn0707"
+      ],
+      "gold_summary": "Conclusion: gossamer index bloat for the database layer in hollow",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn0700",
+          "summary": "Lesson: gossamer schema drift for the database layer in hollow (a.k.a. the object mapper)"
+        },
+        {
+          "rank": 2,
+          "id": "syn0703",
+          "summary": "Handoff: gossamer index bloat for the database layer in hollow (a.k.a. the object mapper)"
+        },
+        {
+          "rank": 3,
+          "id": "syn0706",
+          "summary": "Lesson: gossamer schema drift for the database layer in hollow (a.k.a. the object mapper)"
+        }
+      ]
+    },
+    {
+      "qid": "q07-question",
+      "kind": "question",
+      "query": "why did we choose prisma for hollow",
+      "gold": [
+        "syn0707"
+      ],
+      "gold_summary": "Conclusion: gossamer index bloat for the database layer in hollow",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q08-question",
+      "kind": "question",
+      "query": "why did we choose sqlalchemy for ingot",
+      "gold": [
+        "syn0800"
+      ],
+      "gold_summary": "Conclusion: harrow retry storm for the query layer in ingot (a.k.a. the reporting layer)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q09-paraphrase",
+      "kind": "paraphrase",
+      "query": "unit tests test runner",
+      "gold": [
+        "syn0901"
+      ],
+      "gold_summary": "Handoff: juniper lease renewal for the ci suite in jubilee",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn0900",
+          "summary": "Fact: juniper fanout width for the ci suite in jubilee (a.k.a. the unit tests)"
+        },
+        {
+          "rank": 2,
+          "id": "syn0906",
+          "summary": "Fact: juniper fanout width for the ci suite in jubilee (a.k.a. the unit tests)"
+        },
+        {
+          "rank": 3,
+          "id": "syn0903",
+          "summary": "Decision: juniper lease renewal for the ci suite in jubilee (a.k.a. the unit tests)"
+        }
+      ]
+    },
+    {
+      "qid": "q09-question",
+      "kind": "question",
+      "query": "why did we choose pytest for jubilee",
+      "gold": [
+        "syn0901"
+      ],
+      "gold_summary": "Handoff: juniper lease renewal for the ci suite in jubilee",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q10-paraphrase",
+      "kind": "paraphrase",
+      "query": "text search full text search",
+      "gold": [
+        "syn1002"
+      ],
+      "gold_summary": "Decision: kelp write path for the search index in kettle",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn1000",
+          "summary": "Handoff: kelp write path for the search index in kettle (a.k.a. the text search)"
+        },
+        {
+          "rank": 2,
+          "id": "syn1003",
+          "summary": "Lesson: kelp cold start for the search index in kettle (a.k.a. the text search)"
+        },
+        {
+          "rank": 3,
+          "id": "syn1006",
+          "summary": "Handoff: kelp write path for the search index in kettle (a.k.a. the text search)"
+        }
+      ]
+    },
+    {
+      "qid": "q10-question",
+      "kind": "question",
+      "query": "why did we choose fts5 for kettle",
+      "gold": [
+        "syn1002"
+      ],
+      "gold_summary": "Decision: kelp write path for the search index in kettle",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q11-question",
+      "kind": "question",
+      "query": "why did we choose bm25 for larkspur",
+      "gold": [
+        "syn1103"
+      ],
+      "gold_summary": "Conclusion: lantern queue depth for the ranking in larkspur (a.k.a. the relevance scoring)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q12-paraphrase",
+      "kind": "paraphrase",
+      "query": "vector search vector index",
+      "gold": [
+        "syn1204"
+      ],
+      "gold_summary": "Handoff: marble schema drift for the semantic search in meadow",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn1203",
+          "summary": "Fact: marble index bloat for the semantic search in meadow (a.k.a. the vector search)"
+        },
+        {
+          "rank": 2,
+          "id": "syn1200",
+          "summary": "Decision: marble schema drift for the semantic search in meadow (a.k.a. the vector search)"
+        },
+        {
+          "rank": 3,
+          "id": "syn1206",
+          "summary": "Decision: marble schema drift for the semantic search in meadow (a.k.a. the vector search)"
+        }
+      ]
+    },
+    {
+      "qid": "q12-question",
+      "kind": "question",
+      "query": "why did we choose embeddings for meadow",
+      "gold": [
+        "syn1204"
+      ],
+      "gold_summary": "Handoff: marble schema drift for the semantic search in meadow",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q13-paraphrase",
+      "kind": "paraphrase",
+      "query": "embedding store vector extension",
+      "gold": [
+        "syn1305"
+      ],
+      "gold_summary": "Decision: nimbus cache stampede for the vector index in nutmeg",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn1300",
+          "summary": "Lesson: nimbus retry storm for the vector index in nutmeg (a.k.a. the embedding store)"
+        },
+        {
+          "rank": 2,
+          "id": "syn1306",
+          "summary": "Lesson: nimbus retry storm for the vector index in nutmeg (a.k.a. the embedding store)"
+        },
+        {
+          "rank": 3,
+          "id": "syn1303",
+          "summary": "Handoff: nimbus cache stampede for the vector index in nutmeg (a.k.a. the embedding store)"
+        }
+      ]
+    },
+    {
+      "qid": "q13-question",
+      "kind": "question",
+      "query": "why did we choose sqlite-vec for nutmeg",
+      "gold": [
+        "syn1305"
+      ],
+      "gold_summary": "Decision: nimbus cache stampede for the vector index in nutmeg",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q14-question",
+      "kind": "question",
+      "query": "why did we choose jito for orchard",
+      "gold": [
+        "syn1406"
+      ],
+      "gold_summary": "Conclusion: obsidian fanout width for the landing path in orchard (a.k.a. the bundle relay)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q15-paraphrase",
+      "kind": "paraphrase",
+      "query": "on chain chain",
+      "gold": [
+        "syn1507"
+      ],
+      "gold_summary": "Handoff: pewter cold start for the settlement path in pickerel",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn1500",
+          "summary": "Fact: pewter write path for the settlement path in pickerel (a.k.a. the on chain)"
+        },
+        {
+          "rank": 2,
+          "id": "syn1503",
+          "summary": "Decision: pewter cold start for the settlement path in pickerel (a.k.a. the on chain)"
+        },
+        {
+          "rank": 3,
+          "id": "syn1506",
+          "summary": "Fact: pewter write path for the settlement path in pickerel (a.k.a. the on chain)"
+        }
+      ]
+    },
+    {
+      "qid": "q15-question",
+      "kind": "question",
+      "query": "why did we choose solana for pickerel",
+      "gold": [
+        "syn1507"
+      ],
+      "gold_summary": "Handoff: pewter cold start for the settlement path in pickerel",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q16-question",
+      "kind": "question",
+      "query": "why did we choose pump.fun for quill",
+      "gold": [
+        "syn1600"
+      ],
+      "gold_summary": "Handoff: quarry lock contention for the launch path in quill (a.k.a. the token launch)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q17-paraphrase",
+      "kind": "paraphrase",
+      "query": "promotion rules lifecycle gate",
+      "gold": [
+        "syn1701"
+      ],
+      "gold_summary": "Decision: rowan index bloat for the promotion in rafter",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn1706",
+          "summary": "Capture: rowan schema drift for the promotion in rafter (a.k.a. the promotion rules)"
+        },
+        {
+          "rank": 2,
+          "id": "syn1700",
+          "summary": "Capture: rowan schema drift for the promotion in rafter (a.k.a. the promotion rules)"
+        },
+        {
+          "rank": 3,
+          "id": "syn1703",
+          "summary": "Conclusion: rowan index bloat for the promotion in rafter (a.k.a. the promotion rules)"
+        }
+      ]
+    },
+    {
+      "qid": "q17-question",
+      "kind": "question",
+      "query": "why did we choose promotion gate for rafter",
+      "gold": [
+        "syn1701"
+      ],
+      "gold_summary": "Decision: rowan index bloat for the promotion in rafter",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q18-paraphrase",
+      "kind": "paraphrase",
+      "query": "dataset build exporter",
+      "gold": [
+        "syn1802"
+      ],
+      "gold_summary": "Conclusion: sable retry storm for the training data in sorrel",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn1800",
+          "summary": "Decision: sable retry storm for the training data in sorrel (a.k.a. the dataset build)"
+        },
+        {
+          "rank": 2,
+          "id": "syn1803",
+          "summary": "Fact: sable cache stampede for the training data in sorrel (a.k.a. the dataset build)"
+        },
+        {
+          "rank": 3,
+          "id": "syn1806",
+          "summary": "Decision: sable retry storm for the training data in sorrel (a.k.a. the dataset build)"
+        }
+      ]
+    },
+    {
+      "qid": "q18-question",
+      "kind": "question",
+      "query": "why did we choose dataset export for sorrel",
+      "gold": [
+        "syn1802"
+      ],
+      "gold_summary": "Conclusion: sable retry storm for the training data in sorrel",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q19-question",
+      "kind": "question",
+      "query": "why did we choose sft export for tinder",
+      "gold": [
+        "syn1903"
+      ],
+      "gold_summary": "Handoff: thicket lease renewal for the supervised set in tinder (a.k.a. the instruction pairs)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q20-question",
+      "kind": "question",
+      "query": "why did we choose dpo pairs for umbra",
+      "gold": [
+        "syn2004"
+      ],
+      "gold_summary": "Decision: umber write path for the preference data in umbra",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q21-paraphrase",
+      "kind": "paraphrase",
+      "query": "node export graph writer",
+      "gold": [
+        "syn2105"
+      ],
+      "gold_summary": "Conclusion: verdigris queue depth for the graph snapshot in verdant",
+      "found_at": null,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "syn2100",
+          "summary": "Fact: verdigris lock contention for the graph snapshot in verdant (a.k.a. the node export)"
+        },
+        {
+          "rank": 2,
+          "id": "syn2106",
+          "summary": "Fact: verdigris lock contention for the graph snapshot in verdant (a.k.a. the node export)"
+        },
+        {
+          "rank": 3,
+          "id": "syn2103",
+          "summary": "Decision: verdigris queue depth for the graph snapshot in verdant (a.k.a. the node export)"
+        }
+      ]
+    },
+    {
+      "qid": "q21-question",
+      "kind": "question",
+      "query": "why did we choose graph export for verdant",
+      "gold": [
+        "syn2105"
+      ],
+      "gold_summary": "Conclusion: verdigris queue depth for the graph snapshot in verdant",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q22-question",
+      "kind": "question",
+      "query": "why did we choose reflection pass for willow",
+      "gold": [
+        "syn2206"
+      ],
+      "gold_summary": "Handoff: wharf schema drift for the session digest in willow (a.k.a. the session summary)",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q23-question",
+      "kind": "question",
+      "query": "why did we choose session hook for xylem",
+      "gold": [
+        "syn2307"
+      ],
+      "gold_summary": "Decision: xenon cache stampede for the end of session in xylem",
+      "found_at": null,
+      "retrieved": []
+    },
+    {
+      "qid": "q24-question",
+      "kind": "question",
+      "query": "why did we choose minhash dedup for zephyr",
+      "gold": [
+        "syn2400"
+      ],
+      "gold_summary": "Decision: yarrow fanout width for the near duplicate in zephyr (a.k.a. the duplicate merge)",
+      "found_at": null,
+      "retrieved": []
+    }
+  ]
+}

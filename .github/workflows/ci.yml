@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: lint
+        run: ruff check .
+      - name: test
+        run: pytest -q
+      - name: benchmark harness self-tests
+        # `testpaths` points at tests/, so the harness's own tests are never collected by the step
+        # above; they still gate, because a harness that mis-scores publishes numbers (#47).
+        run: pytest -q benchmarks/tests
+      - name: end-to-end smoke (no model needed)
+        run: |
+          python -m sigil --vault /tmp/v init
+          python -m sigil --vault /tmp/v write --kind decision --state promoted \
+            --summary "markdown is the source of truth" --evidence "40 ms reindex" \
+            --ask "where does sigil keep its data?" --project sigil
+          python -m sigil --vault /tmp/v search markdown
+          python -m sigil --vault /tmp/v export sft --out /tmp/v/sft.jsonl
+          test -s /tmp/v/sft.jsonl

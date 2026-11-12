@@ -1,0 +1,212 @@
+{
+  "dataset": {
+    "name": "live",
+    "version": "v1",
+    "size": null,
+    "queries": 10,
+    "notes": "ten hand-judged questions against a copy of ~/quipu-vault; gold ids hand-verified, and an empty list means the corpus has no answer"
+  },
+  "run": {
+    "date": "2026-10-29",
+    "python": "3.12.13",
+    "retriever": "quipu.index.search (the shipped function) + a local copy for A/B rows",
+    "git_rev": "f26577e47cb3e168a261d25c5a76c5dee7f5758d",
+    "git_dirty": true
+  },
+  "metrics": {
+    "rank1_gold": 6,
+    "rank1_promoted": 8,
+    "rank1_subject": 9,
+    "gold_in_5": 7
+  },
+  "queries": [
+    {
+      "question": "why did glitch memory run at 3200 fclk",
+      "rank1_id": "b6e42f18",
+      "rank1_state": "promoted",
+      "rank1_summary": "DOCP at 3600 MT/s with FCLK 1800 held 1:1 on the 3900X, cutting memory latency from 85.7 to 75.0 ns and raising bandwidth ~12%, while CPU overclocking was corre",
+      "rank1_subject": true,
+      "rank1_promoted": true,
+      "rank1_gold": false,
+      "gold_in_5": false,
+      "gold_ids": [],
+      "note": "The fact (3960X, 4x16 @3200 FCLK 1600, and 3600 throwing 649 MCEs) lives only in a raw session blob's body. The promoted hits are the OTHER box (3900X DOCP 3600, FCLK 1800) and a stale claim that glitch is a 3900X \u2014 both wrong for this machine. Curation gap: no entry states it."
+    },
+    {
+      "question": "which model is the gateway default for this team",
+      "rank1_id": "f3a6f614",
+      "rank1_state": "promoted",
+      "rank1_summary": "The primary model for the cipher, vector and glyph profiles is qwen3.8-flash-next-iq3_xxs on ollama-cloud, not the minimax/glm/gemma set the team table in my no",
+      "rank1_subject": true,
+      "rank1_promoted": true,
+      "rank1_gold": true,
+      "gold_in_5": true,
+      "gold_ids": [
+        "f3a6f614"
+      ],
+      "note": ""
+    },
+    {
+      "question": "where is the cloudflare tunnel token",
+      "rank1_id": "b14e37ee",
+      "rank1_state": "promoted",
+      "rank1_summary": "cloudflared's credentials for this box live in ~/.cloudflared/: cert.pem (account cert, 282 bytes, 600), one JSON per tunnel (518c31b5-... and 801ed1e5-...), an",
+      "rank1_subject": true,
+      "rank1_promoted": true,
+      "rank1_gold": true,
+      "gold_in_5": true,
+      "gold_ids": [
+        "b14e37ee"
+      ],
+      "note": ""
+    },
+    {
+      "question": "what broke with transformers 5.8 and florence",
+      "rank1_id": "1c8868f3",
+      "rank1_state": "raw",
+      "rank1_summary": "Florence-2's remote code is incompatible with transformers 5.8 (it expects an ol",
+      "rank1_subject": true,
+      "rank1_promoted": false,
+      "rank1_gold": true,
+      "gold_in_5": true,
+      "gold_ids": [
+        "1c8868f3"
+      ],
+      "note": ""
+    },
+    {
+      "question": "how do we back up secrets to usb",
+      "rank1_id": "0058934e",
+      "rank1_state": "promoted",
+      "rank1_summary": "Secret keys are backed up to a USB stick offline (unplugged, unencrypted, holding 418 Solana private keys) and to ~/.secrets-backup-retired-2026-10-09/ on the b",
+      "rank1_subject": true,
+      "rank1_promoted": true,
+      "rank1_gold": true,
+      "gold_in_5": true,
+      "gold_ids": [
+        "0058934e"
+      ],
+      "note": ""
+    },
+    {
+      "question": "which gpu should i buy for local ai",
+      "rank1_id": "e3bd3c24",
+      "rank1_state": "promoted",
+      "rank1_summary": "Switched to local solana-test-validator for infinite SOL testing. Prepared scripts, .env, docs, math verification, API",
+      "rank1_subject": false,
+      "rank1_promoted": true,
+      "rank1_gold": false,
+      "gold_in_5": false,
+      "gold_ids": [],
+      "note": "Nothing in the corpus answers a purchase question; the GPU guidance lives in a skill, not the vault. Curation gap \u2014 and the subject stems still score, which is exactly what #47 is about."
+    },
+    {
+      "question": "how do we deploy a pump.fun token",
+      "rank1_id": "216fb276",
+      "rank1_state": "promoted",
+      "rank1_summary": "Rebuilt the launcher UI as a slick pump.fun-style split-pane with live token",
+      "rank1_subject": true,
+      "rank1_promoted": true,
+      "rank1_gold": false,
+      "gold_in_5": true,
+      "gold_ids": [
+        "f15354cd",
+        "8c2f0d51"
+      ],
+      "note": "The launcher-UI note wins rank 1 on the word 'launcher'; the notes that answer 'how' are the battle-tested launch toolkit and the re-architected Python tx builder."
+    },
+    {
+      "question": "obs overlay transparency keying",
+      "rank1_id": "fb7f85f4",
+      "rank1_state": "promoted",
+      "rank1_summary": "OBS-overlay transparency for the wizard/orb asset works by chroma-keying the ball's own colour so only those pixels go transparent, not by fitting geometry; the",
+      "rank1_subject": true,
+      "rank1_promoted": true,
+      "rank1_gold": true,
+      "gold_in_5": true,
+      "gold_ids": [
+        "fb7f85f4",
+        "91af27d6"
+      ],
+      "note": ""
+    },
+    {
+      "question": "hiveos rig ip addresses for the mining fleet",
+      "rank1_id": "99afe8fd",
+      "rank1_state": "raw",
+      "rank1_summary": "PRL mining HiveOS migration plan \u2014 fleet inventory, alpha-miner v1.6 setup, flight sheet config, overclock targets, troubleshooting",
+      "rank1_subject": true,
+      "rank1_promoted": false,
+      "rank1_gold": false,
+      "gold_in_5": false,
+      "gold_ids": [
+        "b2bbf916"
+      ],
+      "note": "The addresses (192.168.32.22/.23/.25) sit in a shell command inside a raw session note, which is why gold names it; the promoted top hit is a migration plan that mentions the fleet and carries no addresses at all."
+    },
+    {
+      "question": "did we already try embeddings for search",
+      "rank1_id": "52133f97",
+      "rank1_state": "promoted",
+      "rank1_summary": "quipu has opt-in semantic search (quipu embed + search --hybrid) that fuses bm25 with vectors from any OpenAI-compatible /v1/embeddings endpoint over urllib, ke",
+      "rank1_subject": true,
+      "rank1_promoted": true,
+      "rank1_gold": true,
+      "gold_in_5": true,
+      "gold_ids": [
+        "52133f97"
+      ],
+      "note": ""
+    }
+  ],
+  "variants": [
+    {
+      "variant": "A and_only, flat",
+      "rank1_gold": 5,
+      "rank1_promoted": 7,
+      "rank1_subject": 7,
+      "gold_in_5": 5,
+      "n": 10
+    },
+    {
+      "variant": "B and_thin, flat",
+      "rank1_gold": 5,
+      "rank1_promoted": 6,
+      "rank1_subject": 8,
+      "gold_in_5": 6,
+      "n": 10
+    },
+    {
+      "variant": "C and_thin, shipped column weights",
+      "rank1_gold": 6,
+      "rank1_promoted": 8,
+      "rank1_subject": 9,
+      "gold_in_5": 7,
+      "n": 10
+    },
+    {
+      "variant": "D and_thin, flat, raw x0.5 pruned x0.1",
+      "rank1_gold": 6,
+      "rank1_promoted": 9,
+      "rank1_subject": 9,
+      "gold_in_5": 6,
+      "n": 10
+    },
+    {
+      "variant": "E and_thin, shipped, raw x0.5 pruned x0.1",
+      "rank1_gold": 6,
+      "rank1_promoted": 9,
+      "rank1_subject": 9,
+      "gold_in_5": 7,
+      "n": 10
+    },
+    {
+      "variant": "F and_thin, summary-only (10/1/1/0.2)",
+      "rank1_gold": 6,
+      "rank1_promoted": 9,
+      "rank1_subject": 10,
+      "gold_in_5": 7,
+      "n": 10
+    }
+  ]
+}
