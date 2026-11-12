@@ -303,7 +303,11 @@ def cmd_search(args) -> int:
         print("no matches")
         return 1
     for i, r in enumerate(rows, 1):
-        print(f"{i}. [{r['id']}] {r['state']:<8} {r['kind']:<10} {r['summary'][:90]}")
+        line = f"{i}. [{r['id']}] {r['state']:<8} {r['kind']:<10} {r['summary'][:90]}"
+        superseded_by = r.get("superseded_by")
+        if superseded_by:
+            line += f"  (superseded by {superseded_by})"
+        print(line)
         snip = " ".join((r["snip"] or "").split())
         if snip:
             print(f"   {snip[:200]}")

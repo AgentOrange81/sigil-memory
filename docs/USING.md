@@ -382,6 +382,14 @@ sigil search "status paste" --all-states       # everything, pruned included
 The graph and the exports still read pruned entries: pruning is about what retrieval offers, not about
 what history is allowed to remember. The MCP `search` tool takes the same switch as `include_pruned`.
 
+### Superseded claims rank last, not gone
+
+An entry that another entry names in its `supersedes` list is still searched, but it ranks below every
+current claim and carries the corrector's id: the CLI prints `(superseded by <id>)` after the hit, and
+`--json` / the tool payloads carry `superseded_by`. Nothing is deleted — ask for enough results and the
+stale claim is there, at the tail. The two mechanisms do different jobs: **supersede** records that a
+claim was replaced (and turns the pair into training data), **prune** stops offering it at all.
+
 ## Optional semantic search
 
 `sigil search` is lexical (SQLite FTS5 + bm25) and works with nothing else installed. When a vault's
