@@ -22,11 +22,11 @@ sigil = "sigil:register"
 
 Install it from a checkout, or from the wheel the release workflow attaches to each GitHub Release
 (the asset is named `<distribution>-<version>-py3-none-any.whl`, e.g.
-`sigil_memory-0.10.0-py3-none-any.whl`):
+`sigil_memory-0.10.2-py3-none-any.whl`):
 
 ```bash
 pip install -e .                              # from a clone of this repo
-pip install ./sigil_memory-0.10.0-py3-none-any.whl   # or a downloaded release asset
+pip install ./sigil_memory-0.10.2-py3-none-any.whl   # or a downloaded release asset
 ```
 
 Then select it in the profile's `config.yaml` — two lines, nothing else:
