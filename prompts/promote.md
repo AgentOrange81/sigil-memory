@@ -17,7 +17,7 @@ contains no real outcome, return `{"entries": []}` — an empty result is a vali
 - a command whose output shows it: `nvidia-smi` reported 3 cards, 10617 MiB each
 - a file and line: sigil/hook.py:76 (the pass budget), docs/USING.md:436
 - a log line: ~/admin/logs/sigil-capture.log — "21:46:36 ok glitch/local-c1a3 907s, 24 chunks"
-- a URL: https://github.com/AgentOrange81/sigil/actions/runs/42897600261
+- a URL: https://github.com/AgentOrange81/sigil-memory/actions/runs/43195949263
 A bare number is NOT evidence: "acceptance 0.697 vs 0.871" or "378 passed" belongs in `summary`, not in
 `evidence`. If the transcript shows no such pointer, write the honest sentence — "no re-checkable
 evidence in the session" — rather than a restatement that looks like proof.
