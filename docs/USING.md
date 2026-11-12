@@ -367,6 +367,21 @@ when the body holds no prose at all, reporting `summary not prose` in `skipped_b
 memory to tidy a field is the worse trade. `sigil audit` reports `blob summary` for anything that got in
 before the rule existed.
 
+## What search leaves out
+
+`pruned` entries are not returned. Pruning is the vault's judgement that an entry has no recall or
+training value — a session status paste, a duplicated handoff, a transcript dump promoted to a note —
+and offering those as memory is how an agent learns to distrust recall. Two ways to reach them
+deliberately:
+
+```bash
+sigil search "status paste" --state pruned     # only the pruned entries
+sigil search "status paste" --all-states       # everything, pruned included
+```
+
+The graph and the exports still read pruned entries: pruning is about what retrieval offers, not about
+what history is allowed to remember. The MCP `search` tool takes the same switch as `include_pruned`.
+
 ## Optional semantic search
 
 `sigil search` is lexical (SQLite FTS5 + bm25) and works with nothing else installed. When a vault's

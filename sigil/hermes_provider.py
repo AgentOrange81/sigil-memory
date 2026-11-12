@@ -128,7 +128,10 @@ SEARCH_SCHEMA = _schema(
     "Search the sigil memory vault for prior outcomes, decisions and measurements. "
     "Use before answering anything project-history shaped.",
     {"query": _str_prop("What to look for (keywords, not sentences)."),
-     "limit": {"type": "integer", "description": "Maximum results (default 5)."}},
+     "limit": {"type": "integer", "description": "Maximum results (default 5)."},
+     "include_pruned": {"type": "boolean",
+                        "description": "Also return pruned entries. Off by default: pruning marks an "
+                                       "entry as having no recall value."}},
     ["query"],
 )
 
@@ -386,7 +389,8 @@ class SigilMemoryProvider(MemoryProvider):
             limit = int(args.get("limit") or self._limit)
         except (TypeError, ValueError):
             limit = self._limit
-        rows = index_mod.search(_db_path(self._vault), query, limit=limit)
+        rows = index_mod.search(_db_path(self._vault), query, limit=limit,
+                                include_pruned=bool(args.get("include_pruned")))
         results = [{"id": r.get("id"), "summary": r.get("summary"), "state": r.get("state"),
                     "score": r.get("score", 0.0)} for r in rows]
         return json.dumps({"results": results})

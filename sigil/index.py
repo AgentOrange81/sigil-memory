@@ -237,8 +237,16 @@ def time_bound(value: str, *, upper: bool) -> tuple[str, str]:
 
 def search(db: str | Path, query: str, kind: str | None = None, state: str | None = None,
            agent: str | None = None, project: str | None = None, limit: int = 10,
-           since: str | None = None, until: str | None = None) -> list[dict]:
+           since: str | None = None, until: str | None = None,
+           include_pruned: bool = False) -> list[dict]:
     """Rank entries for `query`. AND first, then topped up from the OR ranking (#43).
+
+    `pruned` entries are excluded unless the caller asks for them (`include_pruned`, or an explicit
+    `state="pruned"`). Pruning is the vault's decision that an entry has no recall or training value —
+    a session dump promoted to a note, a status paste, a duplicated handoff — and before this filter
+    existed such an entry came back at rank 1 for a query that matched its own words, which taught
+    agents to distrust recall. The graph and the exports keep reading pruned entries: pruning is about
+    what retrieval offers, not about what history is allowed to remember.
 
     Every token is ANDed, which is precise and, for a question-shaped query, nearly empty: one word
     ("why", "did") in no note at all used to produce nothing, and the OR fallback that fixed that
@@ -259,6 +267,8 @@ def search(db: str | Path, query: str, kind: str | None = None, state: str | Non
         if val:
             where.append(f"e.{col} = ?")
             params.append(val)
+    if not state and not include_pruned:
+        where.append("e.state != 'pruned'")
     for value, is_upper in ((since, False), (until, True)):
         if value:
             op, instant = time_bound(str(value), upper=is_upper)
